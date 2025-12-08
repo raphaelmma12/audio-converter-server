@@ -46,16 +46,16 @@ app.post('/convert-audio', upload.single('audio'), async (req, res) => {
     }
 
     const inputPath = req.file.path;
-    const outputPath = `/tmp/${Date.now()}-output.ogg`;
+    const outputPath = `/tmp/${Date.now()}-output.mp4`;
 
     console.log(`[${new Date().toISOString()}] Converting: ${inputPath} -> ${outputPath}`);
 
     try {
         await new Promise((resolve, reject) => {
             ffmpeg(inputPath)
-                .audioCodec('libopus')
+                .audioCodec('aac')
                 .audioBitrate('64k')
-                .format('ogg')
+                .format('mp4')
                 .on('start', (cmd) => {
                     console.log('FFmpeg command:', cmd);
                 })
@@ -75,8 +75,8 @@ app.post('/convert-audio', upload.single('audio'), async (req, res) => {
 
         // Send converted file
         res.set({
-            'Content-Type': 'audio/ogg',
-            'Content-Disposition': 'attachment; filename="audio.ogg"'
+            'Content-Type': 'audio/mp4',
+            'Content-Disposition': 'attachment; filename="audio.mp4"'
         });
 
         const readStream = fs.createReadStream(outputPath);
