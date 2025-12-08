@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: audio-converter
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd audio-converter-server && npm install
+    startCommand: cd audio-converter-server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        value: https://seu-app.vercel.app,http://localhost:8080
+    healthCheckPath: /health
